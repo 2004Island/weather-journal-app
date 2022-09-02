@@ -11,7 +11,7 @@ const port = 4202
 
 function printing(){
     console.log(`Server is running on port: ${port}`);
-}
+};
 
 // Start up an instance of app
 const app = express();
@@ -27,25 +27,27 @@ app.use(cors());
 // Initialize the main project folder
 app.use(express.static('website'));
 
-// GET request
+//Setup Server
+const server = app.listen(port, printing);
 
-app.get('/all_data', function (req, res){
-    res.send(projectData);
-    projectData = {};
-});
+//GET request
 
-// POST request
+app.get('/all_data', sendData)
 
-app.post('/added_data', addData);
+function sendData (req, res) {
+    res.send(projectData)
+}
+
+// POST route
+app.post('/added_data', addData)
 
 // Creates key value pair for each variable
 
-function addData (req, res) {
-    console.log(req.body);
-    projectData.date =  req.body.date;
-    projectData.temp =  req.body.temp;
-    projectData.content = req.body.content;
+function addData(req, res) {
+    projectData.temperature = req.body.temperature;
+    projectData.date = req.body.date;
+    projectData.user_response = req.body.user_response;
+    projectData.city = req.body.city;
+    res.end();
+    console.log(projectData)
 }
-
-// Setup Server
-const server = app.listen(port, printing)
